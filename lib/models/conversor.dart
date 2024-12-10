@@ -2,20 +2,30 @@ import 'package:measure_converter_atv3/enumeration/measure.dart';
 import 'package:measure_converter_atv3/models/ingredient.dart';
 
 class Conversor {
-  final Map<String, Map<Measure, double>> _conversionFactors = {
-    'farinha': {
-      Measure.gram: 120,
-      Measure.liter: 0.130,
-    },
-    // ... outras substâncias ...
-  };
+  final Map<String, Ingredient> ingredients;
 
-  Ingredient converter(Ingredient ingredient, Measure newMeasure) {
-    var factor = _conversionFactors[ingredient.name]?[newMeasure];
-    if (factor == null) {
-      throw Exception('Conversão não suportada');
+  Conversor(this.ingredients);
+
+  double? convert(
+    String ingredientName,
+    double quantity,
+    Measure fromUnit,
+    Measure toUnit,
+  ) {
+    if (!ingredients.containsKey(ingredientName)) {
+      return null;
     }
-    return Ingredient(
-        ingredient.name, ingredient.quantity * factor, newMeasure);
+
+    Ingredient ingredient = ingredients[ingredientName]!;
+    double fromFactor = ingredient.conversionFactors[fromUnit] ?? -1;
+    double toFactor = ingredient.conversionFactors[toUnit] ?? -1;
+
+    if (fromFactor == -1 || toFactor == -1) {
+      return null;
+    }
+
+    double inBaseUnit =
+        quantity / fromFactor; // Converte para a unidade base (xícara).
+    return inBaseUnit * toFactor; // Converte para a unidade de destino.
   }
 }
