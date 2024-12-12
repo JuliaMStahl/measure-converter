@@ -25,5 +25,11 @@ void main() {
           converter.convert('chocolate', 1, Measure.cup, Measure.gram);
       expect(result, null);
     });
+
+    test('Convert -1 gram of sugar to cups (invalid)', () {
+      double? result =
+          converter.convert('açúcar', -1, Measure.gram, Measure.cup);
+      expect(result, null);
+    });
   });
 }

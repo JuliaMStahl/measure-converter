@@ -12,7 +12,7 @@ class Conversor {
     Measure fromUnit,
     Measure toUnit,
   ) {
-    if (!ingredients.containsKey(ingredientName)) {
+    if (!ingredients.containsKey(ingredientName) || quantity <= 0) {
       return null;
     }
 
